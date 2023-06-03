@@ -12,11 +12,11 @@ app.get('/',(req,res)=>{
     res.send('Welcome to my Bread World')
 })
 
-//BREADS
+//Bread
 const breadsController = require('./controllers/breads_controller.js')
 app.use('/breads', breadsController)
 
-//LISTEN
+//Listen
 app.listen(PORT,()=>{
     console.log('listening on port',PORT);
 })
