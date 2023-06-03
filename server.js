@@ -15,6 +15,7 @@ app.get('/',(req,res)=>{
 //Middleware
 const breadsController = require('./controllers/breads_controller.js')
 app.use('/breads', breadsController)
+app.use(express.urlencoded({extended: true}))
 app.use(express.static('public'))
 app.set('views', __dirname + '/views')
 app.set('view engine', 'jsx')
