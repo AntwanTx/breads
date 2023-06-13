@@ -1,5 +1,25 @@
+//Require mongoose
+const mongoose = require('mongoose')
+
+//Creating shorthand for the Schema constructor
+const {Schema} = mongoose
+
+//Schema
+const breadSchema = new Schema ({
+  name: {type:String, required:true},
+  hasGluten: Boolean,
+  image: {type:String, 
+    default:'http://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NXx8fGVufDB8fHx8fA%3D%3D&w=400&q=80'},
+})
+
+//Model and Export
+const Bread = mongoose.model('Bread', breadSchema)
+module.exports = Bread
+
+
+
 //Breads
-module.exports = [
+/*module.exports = [
     {
       name: 'Rye',
       hasGluten: true,
@@ -20,5 +40,5 @@ module.exports = [
       hasGluten: true,
       image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80',
     }
-  ]
+  ]*/
   

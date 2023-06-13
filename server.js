@@ -2,6 +2,7 @@
 const express = require ('express')
 const app = express()
 const methodOverride = require('method-override')
+const mongoose = require('mongoose')
 
 //Configuration
 require('dotenv').config()
@@ -12,6 +13,12 @@ console.log(PORT)
 app.get('/',(req,res)=>{
     res.send('Welcome to my Bread World')
 })
+
+mongoose.connect(process.env.MONGO_URI, 
+    {useNewUrlParser: true, useUnifiedTopology: true},() => {
+        console.log('Connected to MongoDB:', process.env.MONGO_URI)
+    })
+
 
 //Middleware
 const breadsController = require('./controllers/breads_controller.js')
@@ -31,5 +38,5 @@ app.get('*', (req, res) => {
  
 //Listen
 app.listen(PORT,()=>{
-    console.log('listening on port',PORT)
+    console.log('Listening on port:',PORT)
 })
