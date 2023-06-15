@@ -1,4 +1,4 @@
-//Require mongoose
+//Dependencies
 const mongoose = require('mongoose')
 
 //Creating shorthand for the Schema constructor
@@ -11,14 +11,16 @@ const breadSchema = new Schema ({
   image: {type:String, 
     default:'http://images.unsplash.com/photo-1540189549336-e6e99c3679fe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxleHBsb3JlLWZlZWR8NXx8fGVufDB8fHx8fA%3D%3D&w=400&q=80'},
   baker:{
-    type: String,
-    enum: ['Rachel', 'Monica', 'Joey', 'Chandler', 'Ross', 'Phoebe']
+    type: Schema.Types.ObjectId,
+    ref: 'Baker'
   }
 })
 
 //Helper Methods
 breadSchema.methods.getBakedBy = function () {
-  return `${this.name} bread was baked with love by ${this.baker}`
+  return `${this.name} bread was baked with love by 
+  ${this.baker.name}, who joined our family in
+  ${this.baker.startDate.getFullYear()}`
 }
 
 //Model and Export
