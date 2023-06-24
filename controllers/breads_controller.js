@@ -3,6 +3,16 @@ const breads = express.Router()
 const Bread = require('../models/bread.js')
 const Baker = require('../models/baker.js')
 
+// Index:
+breads.get('/', async (req, res) => {
+  const foundBakers = await Baker.find().lean()
+  const foundBreads = await Bread.find().limit(9).lean()
+  res.render('index', {
+    breads: foundBreads,
+    bakers: foundBakers,
+    title: 'Index Page'
+  })
+})
 
 // In the new route
 breads.get('/new', (req, res) => {
@@ -15,16 +25,7 @@ breads.get('/new', (req, res) => {
 })
 
 
-// Index:
-breads.get('/', async (req, res) => {
-  const foundBakers = await Baker.find().lean()
-  const foundBreads = await Bread.find().limit(9).lean()
-  res.render('index', {
-    breads: foundBreads,
-    bakers: foundBakers,
-    title: 'Index Page'
-  })
-})
+
 
 // EDIT
 breads.get('/:id/edit', (req, res) => {
@@ -40,7 +41,28 @@ breads.get('/:id/edit', (req, res) => {
     })
 })
 
- 
+//Show
+breads.get('/:id', (req, res) => {
+  Bread.findById(req.params.id)
+  .populate('baker')
+      .then(foundBread => {
+        const bakedBy = foundBread.getBakedBy()
+        console.log(bakedBy)
+          res.render('Show', {
+              bread: foundBread
+          })
+      })
+})
+
+//Delete
+breads.delete('/:id', (req, res) => {
+  Bread.findByIdAndDelete(req.params.id)
+  .then(deleteBread => {
+  res.status(303).redirect('/breads')
+})
+
+})
+
 // Update
   breads.put('/:id', 
   express.urlencoded({extended: true}), 
@@ -57,10 +79,6 @@ breads.get('/:id/edit', (req, res) => {
   })
 })
 
-// New
-breads.get('/new', (req, res) => {
-  res.render('new')
-})
 
 // // Edit
 // breads.get('/:id/edit', (req, res) => {
@@ -72,18 +90,7 @@ breads.get('/new', (req, res) => {
 // })
 // })
 
-//Show
-breads.get('/:id', (req, res) => {
-  Bread.findById(req.params.id)
-  .populate('baker')
-      .then(foundBread => {
-        const bakedBy = foundBread.getBakedBy()
-        console.log(bakedBy)
-          res.render('Show', {
-              bread: foundBread
-          })
-      })
-})
+
 
 //Create
 breads.post('/', express.urlencoded({extended: true}),(req,res)=> {
@@ -100,13 +107,5 @@ breads.post('/', express.urlencoded({extended: true}),(req,res)=> {
 })
 
 
-
-//Delete
-breads.delete('/:id', (req, res) => {
-  Bread.findByIdAndDelete(req.params.id)
-  .then(deleteBread => {
-  res.status(303).redirect('/breads')
-})
-})
 
 module.exports = breads
