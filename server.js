@@ -6,18 +6,11 @@ const mongoose =require('mongoose')
 
 //Configuration
 require('dotenv').config()
-const PORT = process.env.PORT
-console.log(PORT)
 
 //Routes
 app.get('/',(req,res)=>{
     res.send('Welcome to my Bread World')
 })
-
-mongoose.connect(process.env.MONGO_URI, 
-    {useNewUrlParser: true, useUnifiedTopology: true},() => {
-        console.log('Connected to MongoDB:', process.env.MONGO_URI)
-    })
 
 //Middleware
 app.use(methodOverride('_method'))
@@ -35,12 +28,20 @@ app.use('/breads', breadsController)
 const bakersController = require('./controllers/bakers_controller.js')
 app.use('/bakers', bakersController)
 
+const PORT = process.env.PORT || 3003
+console.log(PORT)
+mongoose.connect(process.env.MONGO_URI, 
+    {useNewUrlParser: true, useUnifiedTopology: true},() => {
+        console.log('Connected to MongoDB:', process.env.MONGO_URI)
+    })
+
 //404 Page
 app.get('*', (req, res) => {
   res.send('404')
 })
  
 //Listen
-app.listen(PORT,()=>{
-    console.log('Listening on port:',PORT)
-})
+app.listen(process.env.PORT)
+//(PORT,()=>{
+//  console.log('Listening on port:',PORT)
+//})

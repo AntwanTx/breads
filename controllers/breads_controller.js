@@ -16,18 +16,14 @@ breads.get('/new', (req, res) => {
 
 
 // Index:
-breads.get('/', (req, res) => {
-  Baker.find()
-    .then(foundBakers => {
-      Bread.find()
-      .then(foundBreads => {
-          res.render('index', {
-              breads: foundBreads,
-              bakers: foundBakers,
-              title: 'Index Page'
-          })
-      })
-    })
+breads.get('/', async (req, res) => {
+  const foundBakers = await Baker.find().lean()
+  const foundBreads = await Bread.find().limit(9).lean()
+  res.render('index', {
+    breads: foundBreads,
+    bakers: foundBakers,
+    title: 'Index Page'
+  })
 })
 
 // EDIT
